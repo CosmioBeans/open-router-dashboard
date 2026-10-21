@@ -1,0 +1,13 @@
+# Local secrets and router backups
+.env
+.env.*
+!.env.example
+/backups/
+/secrets/
+
+# Temporary and generated files
+/work/
+/build/
+/dist/
+node_modules/
+.DS_Store
