@@ -1,79 +1,128 @@
 # Feature catalog
 
-Status: candidates for discussion. No item in this catalog has been approved for implementation, assigned a release, or declared supported. The list will grow as we discuss the project.
+Status: agreed product direction with proposed implementation detail, recorded October 20, 2026. All features are unimplemented. This is a growing scope catalog, not a first-release commitment or a hardware support claim.
 
-These groups describe functional ownership, not a final navigation layout. Each future feature should have one primary home; other screens can reference it without duplicating its settings.
+The [navigation document](navigation.md) owns page placement. The [scenario matrix](scenarios.md) defines where features apply. This document owns behavior and shared requirements.
 
-## System overview
+## Status and identifiers
 
-Internet and local-network health; interface status; uptime; firmware and dashboard versions; CPU, memory, storage, and temperature where exposed; active alerts; recent configuration changes; service health; a summary of detected capabilities.
+- **Planned direction:** the feature families and principles accepted in discussion. Exact controls, backend choices, and release placement remain open.
+- **Candidate:** an earlier brainstorming idea that still needs an explicit scope decision.
+- **Implemented/tested:** not applicable to any entry yet. Future claims need linked implementation and validation evidence.
 
-## Devices
+Stable feature IDs below support later issues and specifications. Keep an ID when its wording changes; do not reuse retired IDs for unrelated features. Proposed details describe how to refine an agreed family without claiming that every mechanism is already decided.
 
-Connected and recently seen clients; names and labels; IPv4/IPv6 addresses; connection type; radio/access point association; signal and negotiated link rates; device groups; DHCP reservations; access schedules; temporary blocking; traffic summaries; new-device notifications. Identification should expose uncertainty rather than invent a device type.
+## Overview and devices
 
-## Internet connections
+| ID | Planned direction | Scope and constraints |
+| --- | --- | --- |
+| F01 | Customizable overview | Connectivity, alerts, versions, service health, selected metrics, and shortcuts. Reorder/hide widgets and restore defaults. |
+| F02 | Device inventory | Active/recent clients, names, notes, labels, addresses, connection type, AP/port association, last seen, and history where observable. Device identification must show uncertainty. |
+| F03 | Device groups and assignments | Reusable groups and profiles; assign access, filtering, bandwidth, and VPN policies. Reservation and policy actions use the owning feature's shared editor. |
 
-Dynamic and static addressing; PPPoE; ISP VLAN requirements; DNS; IPv6 provisioning and prefix delegation; MTU; MAC override where supported; connection tests; multiple WANs; failover; load balancing; cellular/USB tethering; data limits; dynamic DNS; captive-portal handling for travel use.
+## Network
 
-## Wireless
+| ID | Planned direction | Scope and constraints |
+| --- | --- | --- |
+| F04 | Setup and topology | Composable roles, guided presets, upstream/downstream relationships, and ownership of routing, DHCP, DNS, and filtering. Separate managed, discovered, and manually described equipment; label inferred relationships. |
+| F05 | Internet connections | Dynamic/static addressing, PPPoE where supported, ISP VLAN requirements, IPv6, MTU, DNS overrides, wired/wireless/cellular uplinks, and status. Preserve the distinction between an uplink and local access Wi-Fi. |
+| F06 | Multiple uplinks | Failover, load balancing, health checks, and policy-specific behavior. Explain connection changes, DNS/VPN effects, and reachability limits. |
+| F07 | Local networks | Subnets, network membership, bridges, guest/IoT separation, IPv4/IPv6, and per-network configuration. Link isolation and discovery rules to their shared owners. |
+| F08 | Ports and switching | Port roles, link status, tagged/untagged VLAN membership, bridges, and transport across supported uplinks/backhaul. |
+| F09 | DHCP and reservations | Pools, leases, reservations, DHCP options, DHCPv6, and router advertisements where appropriate. Identify external service ownership and avoid conflicting servers. |
+| F10 | DNS | Upstream resolvers, local records, forwarding/split DNS, encrypted upstream options, and diagnostics. Coordinate resolver ownership with filtering modules. |
+| F11 | Routing | Static routes and policy routing, with dynamic routing as an optional integration. IPv4/IPv6 and VPN views share authoritative objects. |
+| F12 | Bandwidth and prioritization | SQM/queue management, priorities, bandwidth limits, and compatible offload controls. Explain dependencies and measure shaping/accounting/offload combinations before support claims. |
 
-Radio and SSID management; security modes; guest networks; passwords and QR sharing; bands, channels, widths, and transmit power; country configuration; schedules; channel surveys; client isolation; band steering; roaming; mesh/backhaul; access point and client modes; multi-link operation when supported.
+## Wi-Fi
 
-Represent supported wireless standards as extensible capability data. Show the distinction between what a radio supports, what is configured, and what a client actually negotiated. Do not assume every device supports every band, width, security mode, or newer wireless feature.
+| ID | Planned direction | Scope and constraints |
+| --- | --- | --- |
+| F13 | Wireless networks | SSIDs, security/passwords, QR sharing, guest networks, network assignments, isolation, and schedules. Reuse policies rather than create competing configuration. |
+| F14 | Radios and channels | Bands, channels, widths, power, country settings, surveys, and supported standards. Distinguish hardware support, configured settings, and client-negotiated capabilities. |
+| F15 | Access points and mesh | Node inventory, wired/wireless backhaul, neighbors, paths, roaming coordination, and compatible shared settings. Central management requires enrollment and authenticated access; visible third-party equipment is not automatically manageable. |
 
-## Local networks and switching
+## VPN
 
-LAN addresses and subnets; DHCP pools, leases, and options; local hostnames; IPv6 router advertisements and DHCPv6; bridges; VLANs; tagged/untagged ports; port roles and link status; isolated guest/IoT networks; static routes; multicast controls; service discovery between selected networks; link aggregation where supported.
+| ID | Planned direction | Scope and constraints |
+| --- | --- | --- |
+| F16 | VPN clients | Outbound profiles, imports, authentication/keys, connection controls, status, routing/DNS, reconnect behavior, and logs. |
+| F17 | VPN servers | Hosted servers, protocol-appropriate users/peers, connection profile export, network access, sessions, and logs. Peers stay associated with their server/tunnel. |
+| F18 | Site-to-site and overlays | Connections between networks and optional overlay integrations. Represent shared tunnel objects once; protocol and provider choices remain open. |
+| F19 | VPN routing policies | Device/network assignments, exclusions, split tunneling, and explicit behavior when a tunnel fails. Integrate with shared policy routing and prevent unexplained fallback. |
 
-## Firewall and access policy
+## Security
 
-Zones; inbound/outbound/forwarding rules; port forwarding; temporary rules; rule ordering and explanations; IPv4/IPv6 consistency; UPnP controls and active mappings; selective inter-network access; management access restrictions; schedule-based policies; configuration previews and validation.
+| ID | Planned direction | Scope and constraints |
+| --- | --- | --- |
+| F20 | Firewall | Zones, traffic rules, inter-network permissions, IPv4/IPv6 consistency, validation, and readable effective behavior. |
+| F21 | Port forwarding | Mappings, optional expiry, conflicts, and diagnostics for upstream restrictions. A local rule does not prove internet reachability. |
+| F22 | Access policies | Device/network restrictions, pauses, reusable schedules/profiles, and understandable exceptions. Apply only where this device can enforce them. |
+| F23 | Ad blocking and filtering | Enable/pause, blocklists and update status, allowlists, custom rules, matching-rule explanations, exceptions, and backend-supported device/network profiles. Optional query history must have retention controls. |
+| F24 | Guest portal | Admission and session controls for supported guest deployments. Hosting a portal is distinct from signing in to an upstream travel-network portal. |
+| F25 | Automatic port mapping | Supported automatic mapping controls and visibility of active mappings. Explain exposure and conflicts with manually configured rules. |
 
-## DNS and filtering
+### Filtering behavior
 
-Upstream resolvers; local DNS records; split DNS; encrypted DNS where available; blocklists and allowlists; per-device or per-network filtering; exceptions; resolver diagnostics; optional query logs; retention controls; family filtering and schedules with clear limitations.
+Use a supported backend behind a consistent interface; backend selection remains open. Prevent competing resolver configurations. Verify whether intended clients use the filtering resolver and explain bypass paths or missing visibility.
 
-## VPN and remote access
+Count blocked DNS queries accurately; do not call them ads removed or threats prevented. DNS-based filtering cannot selectively remove ads that share a domain with wanted content. See [OpenWrt ad-blocking options](https://openwrt.org/docs/guide-user/services/ad-blocking) and the [AdGuard Home FAQ](https://github.com/AdguardTeam/AdGuardHome/wiki/FAQ).
 
-VPN clients and servers; peer/profile management; keys and import/export; tunnel status; per-device and per-network routing; split tunneling; DNS behavior; kill switches; reconnect policies; site-to-site connections; optional overlay-network integrations. Secret handling and management exposure require explicit design.
+## Services
 
-## Traffic and performance
+| ID | Planned direction | Scope and constraints |
+| --- | --- | --- |
+| F26 | Dynamic DNS | Provider profiles, update state, detected address, and useful failure messages. An updated record does not remove upstream NAT restrictions. |
+| F27 | File and printer sharing | Optional hosted services with access controls, status, and storage/device dependencies. Filesystem/device administration belongs under System. |
+| F28 | Additional service integrations | Named pages for explicitly integrated services; shared module dependencies and resource budgets. Raw package availability does not promise a custom UI. |
 
-Current bandwidth; optional historical usage; per-device/interface totals; quotas; prioritization; SQM and queue management; latency and packet-loss tests; bufferbloat assessment; link throughput; hardware/software offload controls; resource impact explanations. Accounting, offload, and shaping may interact and need measured compatibility.
+## Monitoring
 
-## Diagnostics and observability
+| ID | Planned direction | Scope and constraints |
+| --- | --- | --- |
+| F29 | Traffic and usage | Live/historical traffic, per-device/interface totals, comparisons, and export where collection is reliable. Explain missing paths and possible double counting across observation points. |
+| F30 | Connection quality | Uplink availability, latency, jitter, loss, reconnects, failover events, and observable wireless/backhaul quality. Label active probes and test overhead. |
+| F31 | Router health | CPU, memory, storage, temperature where exposed, interface counters/errors, and service health. |
+| F32 | Events and logs | System/service logs, configuration and connection events, filtering explanations, and a shared timeline. Correlation is not proof of cause. |
+| F33 | Diagnostic tools | Ping, route tracing, DNS tests, wireless diagnostics, connection inspection, and scoped packet capture. Provide sanitized support export and clear tool permissions. |
 
-System and service logs; event history; ping, route tracing, and DNS tests; interface counters; wireless diagnostics; packet capture with explicit scope; connection tracking; sanitized support bundles; external metrics export; remote logging; alert destinations; configurable retention and privacy settings.
+### Measurement contract
 
-## Administration
+Each measurement should declare scope, source, units, timestamp/freshness, sampling interval, and retention. Distinguish unavailable, unknown, stale, and zero. Identify measured versus inferred values and gaps in collection.
 
-Admin accounts and roles; passwords and keys; session management; HTTPS certificates; SSH controls; local time and time synchronization; hostname; language and accessibility preferences; optional notifications; audit records; configuration search; consistent contextual help.
+Keep negotiated link rates distinct from measured throughput. Device identity and topology discovery can be incomplete. A gateway cannot assume visibility into all switched or third-party traffic; an AP cannot assume visibility into every client in the building. See the scenario matrix for these boundaries.
 
-## Backup, recovery, and maintenance
+Detailed history is configurable: retention, collection frequency, local storage limits, export, and optional remote collection. Plan for bounded flash writes, CPU/RAM use, and safe handling of full storage. Sensitive query or traffic histories require explicit enablement and deletion controls. Hardware acceleration and collection methods need compatibility tests.
 
-Configuration export/import; encrypted backups; backup verification; selective restore where compatible; scheduled backups; configuration differences; timed confirmation and reversion for disruptive settings; service restart; reboot scheduling; factory reset; device-specific recovery guidance; optional migration assistance.
+## System
 
-Configuration restoration, interface rollback, and firmware recovery are different operations and must be described accurately.
+| ID | Planned direction | Scope and constraints |
+| --- | --- | --- |
+| F34 | Updates | Distinct firmware/dashboard/module releases, release notes, compatibility checks, authenticated metadata, artifact verification, progress, and post-install checks. GitHub hosts versioned artifacts; an updater must still be implemented. |
+| F35 | Software and modules | Discover, install, remove, and inspect compatible integrations and dependencies. Explain resource needs, conflicts, and schema compatibility; installation does not choose policy automatically. |
+| F36 | Backups and recovery | Configuration export/import, protection, verification, compatibility, change previews, and applicable timed reversion. Configuration restoration, UI rollback, and firmware recovery are different operations. |
+| F37 | Administration | Accounts/roles, credentials, sessions, web/SSH access, keys, certificates, and auditability. Identity/permission architecture is an open implementation decision. |
+| F38 | Hardware, time, and region | Supported hardware controls, storage/USB information, hostname, time synchronization, regional/language preferences, and accessible presentation. Radio regulatory settings remain with Radios & Channels. |
+| F39 | Automation and service management | Reusable schedules, explicit maintenance actions, and advanced service runtime/startup controls. Wi-Fi/access schedules reference shared objects; service settings remain on their feature page. |
+| F40 | Reboot and reset | Clear scope, expected interruption, confirmation, and reconnection/recovery guidance. |
 
-## Installation and updates
+## Installation workflow
 
-Compatibility inspection; authenticated router access; supported installation paths; off-device backups; versioned dashboard/software/firmware releases; authenticated release metadata; device-matched artifacts; release notes; update notifications; user-selected update policy; maintenance windows; download verification; progress and reconnection; post-update checks; migration handling; recovery guidance; offline installation.
+The desktop installer is a separate delivery surface, not another sidebar section. Planned direction includes compatibility inspection, authenticated router access, an off-device backup, verified target-specific artifacts, a concrete pre-install review, supported installation procedures, and reconnection checks. A dashboard package install and a firmware migration are different operations. Host platforms, migration paths, and automation limits remain undecided.
 
-GitHub is the intended release source. Update discovery, compatibility checks, artifact verification, and installation still need to be designed and implemented. Publishing a release alone does not make routers update.
+## Shared product behavior
 
-## Optional services and extensions
+- Shared capability discovery evaluates hardware, drivers, installed software, role, permissions, and runtime health. Backend checks enforce the same restrictions as the interface.
+- One authoritative object/editor per setting or policy; context views reuse it. Define precedence per policy family and show effective values, defaults, and overrides.
+- Search, favorites, reusable help, accessible controls, validation, and useful error messages follow the navigation contract.
+- Local administration works without internet access. Updates and external integrations show their own unavailable state.
+- Consequential changes preview affected objects and interruption; recovery behavior must be defined and tested before claims are made.
+- Modularity includes shared behavior and clean interfaces, not just reusable visual components. Hardware exceptions stay in isolated adapters rather than scattered model-name checks.
 
-USB storage; file sharing; printer sharing; cellular modems; optional monitoring integrations; local automation; a documented API; command-line access; optional modules with dependencies and resource budgets; export/import of reusable configuration profiles.
+## Candidates retained for discussion
 
-## Multiple routers and access points
+These ideas from earlier brainstorming remain candidates rather than agreed release scope: data quotas; configurable external notifications; link aggregation; multi-link wireless operation; advanced multicast/service-discovery controls; external metrics and remote logging integrations; a public API/CLI; offline installation bundles; scheduled encrypted backups; staged fleet updates; and portable configuration profiles. Some are natural extensions of planned families, but each needs a concrete design and capability assessment.
 
-Device inventory; shared configuration profiles; coordinated wireless settings; topology; staged updates; health comparison; permission boundaries; local controller options. These are candidates, not a requirement for the first implementation.
+## Feature refinement checklist
 
-## Cross-cutting behavior
-
-Capability discovery; shared help definitions; input validation; readable pending-change summaries; safe application of changes; authentication and authorization; resource limits; local operation without internet; accessibility; privacy; consistent errors; extensible configuration; migration and backward compatibility.
-
-## How we will refine an idea
-
-For each feature we choose to discuss, record its purpose, functional home, user-facing controls, contextual help, capability requirements, dependencies, permissions, failure/recovery behavior, and open questions. Assign implementation status only after we agree on its scope.
+Before implementation, add detail beside the owning entry or link a focused specification when needed: purpose; canonical home; controls and help; capabilities and dependencies; permissions; shared objects and precedence; applicable scenario IDs; collection/storage costs; failure and recovery behavior; migration requirements; acceptance checks; and open decisions. Assign a release only after scope is agreed.
