@@ -2,7 +2,7 @@
 
 ## Status and scope
 
-Recorded October 20, 2026.
+Recorded October 20, 2026; reviewed October 22, 2026.
 
 This document records the agreed need to account for different network arrangements, including upstream routers, access points, mesh nodes, extenders, bridges, and networks without internet access. The detailed behaviors and acceptance checks below are **proposed requirements for review**, not completed or tested functionality. Listing a scenario does not establish support on a particular router.
 
@@ -60,7 +60,7 @@ The product must show the scope in which a feature works. A feature being instal
 | --- | --- | --- | --- |
 | S01, S02 | Apply policies to DNS queries or traffic handled by the configured enforcement component. Show exceptions and paths outside that coverage. | Support device and network policies, with explicit routing and failure behavior. | Report locally observed traffic. Do not claim visibility into unrelated upstream networks. |
 | S03, S08 | Offer filtering only when clients actually use the configured resolver or an applicable enforcement service. AP mode alone does not establish coverage. | Distinguish the access point's own VPN connection from a VPN path for client traffic. | Show measurements available at each AP and a separate aggregated view when managed-node reporting is available. |
-| S04 | Explain whether filtering is local, upstream, or supplied through a VPN. Captive-portal access needs a visible, scoped exception mechanism if required. | Show whether local devices currently use the VPN and what happens before the uplink or tunnel is ready. | Separate local traffic from wireless-uplink usage where the available measurements allow it. |
+| S04 | Explain whether filtering is local, upstream, or supplied through a VPN. If portal sign-in requires an exception, require explicit user action, limit it to the required device and destinations, expire or remove it after sign-in, and preserve other devices' VPN blocking policies. | Show whether local devices currently use the VPN and what happens before the uplink or tunnel is ready. | Separate local traffic from wireless-uplink usage where the available measurements allow it. |
 | S05, S06 | Derive coverage from the selected routed, bridged, or relay arrangement. Do not inherit gateway assumptions. | Enable client-traffic routing only when the actual arrangement supports the required path. | Describe which devices and interfaces are observable. Mark unavailable breakdowns rather than displaying zero. |
 | S07 | Assign filtering responsibility to the relevant gateway or resolver instead of silently duplicating it on every node. | Identify which node owns each tunnel and which networks use it. | Distinguish client traffic, backhaul traffic, and transit traffic. Avoid inflating network totals through repeated observations. |
 | S09 | Define resolver selection and filtering coverage during failover. | Define which uplinks a tunnel may use and whether affected traffic stops or falls back when the tunnel fails. | Separate per-uplink usage from network totals and record path-change events. |
@@ -94,9 +94,10 @@ Scenarios are composable. Future implementation must evaluate the combination, n
 
 - **IPv6:** verify addressing, prefix delegation, router advertisements, routing, DNS, firewall policy, and VPN coverage separately from IPv4. Do not treat IPv4 success as evidence of IPv6 correctness.
 - **VLANs over backhaul:** verify that the selected wired or wireless transport carries the intended networks end to end. Unsupported combinations need an explanation before application.
-- **Upstream NAT and subnet collisions:** distinguish observations from suspected causes. An overlapping subnet is a concrete configuration conflict; a private uplink address alone does not prove a complete NAT topology.
+- **Upstream NAT and subnet collisions:** distinguish observations from suspected causes. Overlapping uplink and downstream prefixes can make routing ambiguous unless an explicitly supported isolation or translation design resolves them. A private uplink address alone does not prove a complete NAT topology.
 - **Management access:** evaluate changes to addresses, VLAN membership, routes, VPN policies, and firewall rules together. Show the next access method before a disruptive change.
 - **Multiple service providers:** identify intended DHCP, DNS, and gateway owners. Warn about conflicting observed providers without assuming that every external service is unauthorized.
+- **Redundant backhaul:** evaluate wired and wireless paths together. Adding Ethernet while wireless backhaul remains active requires a supported loop-prevention or path-selection arrangement, with a management path that survives a link failure.
 - **Roaming and backhaul:** report client association and backhaul health separately. A healthy backhaul does not establish that a client transition succeeded.
 - **Unmanaged nodes:** retain unknown relationships and limited control in maps, policy previews, and troubleshooting. Do not silently convert inferred equipment into managed nodes.
 - **Offline operation:** local management, saved help, and existing configuration remain useful when internet access, package downloads, or release checks fail.
@@ -111,10 +112,12 @@ These are future checks to guide implementation. None are claims that the projec
 3. **Access-point management — S03, S08:** switch a managed test device to AP operation. Confirm that the intended upstream server supplies client addresses and that the displayed management path works. Test recovery after losing the uplink.
 4. **Wireless extension — S04–S07:** exercise supported routed and bridged arrangements separately. Reject unsupported combinations before application, and describe their effect on DHCP, DNS, IPv6, and management access.
 5. **Multi-node visibility — S07, S08, S14:** combine managed and unmanaged equipment. Confirm that the map labels unknown or inferred links and offers configuration actions only for equipment with established management access.
-6. **Failover and VPN policy — S09, S11:** interrupt an uplink and a tunnel independently. Confirm that traffic, DNS, and status follow the declared fallback or blocking policy and that events identify the affected path.
+6. **Failover and VPN policy — S09, S11:** interrupt an uplink and a tunnel independently. Check new and established connections separately. Confirm that traffic, DNS, and status follow the declared fallback or blocking policy and that events identify the affected path and any interrupted sessions. Do not imply that ordinary load balancing bonds uplinks for one transfer.
 7. **Segmentation — S07, S08, S10:** verify permitted and prohibited communication across guest and management networks over each supported backhaul. Include an intentional VLAN mismatch and verify that the diagnostic explanation is specific.
 8. **Filtering coverage — all applicable scenarios:** compare clients using the configured resolver with clients outside that resolver's scope. Confirm that the dashboard reports measured filtering coverage rather than claiming universal protection.
 9. **Offline behavior — S12:** remove internet access while retaining the local network. Confirm local login, configuration, local diagnostics, and clear dependency status without an internet-required setup loop.
 10. **Measurement integrity — all applicable scenarios:** compare known traffic with interface, tunnel, and aggregated counters. Verify scope labels, missing-data states, reset handling, timestamps, and avoidance of duplicate totals.
 11. **Management recovery — all disruptive changes:** simulate a change that would remove the active administration path. Verify the supported confirmation or recovery procedure and report failures without claiming a rollback succeeded.
 12. **IPv6 parity — S01, S02, S09–S11:** verify policy, addressing, DNS, and connectivity for both protocol families. Show partial success accurately when only one family is working.
+13. **Redundant backhaul — S03, S05, S07, S08, S10:** connect Ethernet while wireless backhaul is active. Verify the supported loop-prevention or path-selection behavior, then disconnect each path in turn and check forwarding, topology status, and management access.
+14. **Travel portal and VPN policy — S04, S11:** require portal sign-in while a VPN blocking policy is active. Verify that any user-authorized exception has a defined device/destination scope, expires or is removed after sign-in, and does not silently bypass other devices' policies.

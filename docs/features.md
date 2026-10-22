@@ -1,6 +1,6 @@
 # Feature catalog
 
-Status: agreed product direction with proposed implementation detail, recorded October 20, 2026. All features are unimplemented. This is a growing scope catalog, not a first-release commitment or a hardware support claim.
+Status: agreed product direction with proposed implementation detail, recorded October 20, 2026; reviewed October 22, 2026. All features are unimplemented. This is a growing scope catalog, not a first-release commitment or a hardware support claim.
 
 The [navigation document](navigation.md) owns page placement. The [scenario matrix](scenarios.md) defines where features apply. This document owns behavior and shared requirements.
 
@@ -26,7 +26,7 @@ Stable feature IDs below support later issues and specifications. Keep an ID whe
 | --- | --- | --- |
 | F04 | Setup and topology | Composable roles, guided presets, upstream/downstream relationships, and ownership of routing, DHCP, DNS, and filtering. Separate managed, discovered, and manually described equipment; label inferred relationships. |
 | F05 | Internet connections | Dynamic/static addressing, PPPoE where supported, ISP VLAN requirements, IPv6, MTU, DNS overrides, wired/wireless/cellular uplinks, and status. Preserve the distinction between an uplink and local access Wi-Fi. |
-| F06 | Multiple uplinks | Failover, load balancing, health checks, and policy-specific behavior. Explain connection changes, DNS/VPN effects, and reachability limits. |
+| F06 | Multiple uplinks | Failover, load balancing, health checks, and policy-specific behavior. Explain connection changes, DNS/VPN effects, and reachability limits. Distinguish load balancing from connection bonding; document interruption and reconnection behavior for established sessions during failover. |
 | F07 | Local networks | Subnets, network membership, bridges, guest/IoT separation, IPv4/IPv6, and per-network configuration. Link isolation and discovery rules to their shared owners. |
 | F08 | Ports and switching | Port roles, link status, tagged/untagged VLAN membership, bridges, and transport across supported uplinks/backhaul. |
 | F09 | DHCP and reservations | Pools, leases, reservations, DHCP options, DHCPv6, and router advertisements where appropriate. Identify external service ownership and avoid conflicting servers. |
