@@ -1,21 +1,36 @@
 # Open Router Dashboard
 
-A modular, open-source router administration and firmware project in the planning stage. The working repository name is `open-router-dashboard`; it may change later. The public repository is [CosmioBeans/open-router-dashboard](https://github.com/CosmioBeans/open-router-dashboard).
+A modular router administration and firmware project built around OpenWrt. The aim is extensive control, useful data, and a clear interface that adapts to the router's capabilities and its role in the network.
 
-## Agreed direction
+**Status: planning.** The navigation and product direction below are agreed working foundations. No dashboard, installer, firmware, or updater has been implemented, and no hardware has been tested with project software. Release scope and implementation choices remain open.
 
-- Support compatible routers broadly, rather than designing around particular models.
-- Determine feature availability from hardware, drivers, firmware, and installed software.
-- Use the owner's existing modular HTML templates and styled elements when interface work begins.
-- Keep features, shared behavior, help text, and configuration reusable and consistently organized.
-- Provide contextual information indicators where an explanation helps the user understand a setting.
-- Distribute future versioned releases through GitHub. The update implementation and installation policy remain undecided.
-- Expand the feature set over time.
+The working name is `open-router-dashboard`. Development and future versioned releases use one [public GitHub repository](https://github.com/CosmioBeans/open-router-dashboard).
 
-## Project contents
+## Start here
 
-- [Project standards](CONTRIBUTING.md): rules for organization, code, and writing.
-- [Hardware research](docs/hardware.md): reported device versions and compatibility questions.
-- [Feature catalog](docs/features.md): candidate features to discuss, grouped by responsibility.
+| Document | Responsibility |
+| --- | --- |
+| [Navigation](docs/navigation.md) | The agreed page structure, functional ownership, and navigation behavior. |
+| [Feature catalog](docs/features.md) | Planned capabilities, shared behavior, constraints, and ideas still under consideration. |
+| [Scenario matrix](docs/scenarios.md) | How roles, topology, dependencies, and recovery affect feature applicability. |
+| [Project standards](CONTRIBUTING.md) | Organization, reuse, naming, writing, and contribution practices. |
+| [Hardware research](docs/hardware.md) | Existing device observations; hardware investigation is currently deferred. |
 
-The catalog is a brainstorming inventory, not an approved implementation plan. There is no application, firmware, installer, or update service yet. Frameworks, directory structure for implementation, licensing, and release policy will be selected as needed. Visual design is deferred until integration with the existing templates.
+## Product principles
+
+- Support compatible routers broadly; the initial research devices do not define the product's limits.
+- Determine availability from hardware, drivers, firmware, installed modules, permissions, and network role.
+- Keep common tasks approachable while placing advanced controls beside the feature they affect.
+- Give settings one authoritative home and reuse the same editors, validation, and configuration elsewhere.
+- Reuse the owner's modular HTML templates and styled components when interface work begins. Visual styling is deferred.
+- Make contextual information accessible through shared `(i)` controls; keep essential instructions visible.
+- Support customizable summaries, favorites, device groups, and reusable policies without making navigation unpredictable.
+- Explain the scope and limits of measurements, discovered topology, filtering, and recovery.
+- Keep local administration usable without internet access.
+- Distribute verified, compatible releases through GitHub; release publication and router installation are separate operations.
+
+## How the plan evolves
+
+The documents distinguish agreed direction, proposed detail, and open decisions. Planned scope is not a commitment to ship every feature in the first release. New ideas belong in the relevant existing document; add files only when a new responsibility warrants one.
+
+Before implementing a feature, define its capabilities, scenario coverage, permissions, data ownership, failure behavior, and acceptance checks. Frameworks, backend choices, licensing, installer platforms, update policy, and release sequencing still need decisions.
